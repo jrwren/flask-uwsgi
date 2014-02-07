@@ -11,26 +11,21 @@ Setting up the Python environment
 ---
 First, install the following packages.
     
-    sudo apt-get install build-essential python-dev python-pip
-
-`build-essential` and `python-dev` are used to compile C extensions. Pip is used to install system commands.
-
-Next, install the following Pip packages.
-
-    sudo pip install virtualenv uwsgi 
+    sudo apt-get install python-flask python-virtualenv uwsgi uwsgi-plugin-python nginx
 
 Next, create the Virtualenv for this tutorial.
 
     cd flask-uwsgi
-    virtualenv env
+    virtualenv --system-site-packages env
     source env/bin/activate
-    pip install flask
-
+    
 Next, run the Flask app using uWSGI.
 
-    uwsgi --http 0.0.0.0:8080 --home env --wsgi-file flask_uwsgi.py --callable app --master
+    uwsgi --plugin python --http 0.0.0.0:8080 --home env --wsgi-file flask_uwsgi.py --callable app --master
 
 You should be able to visit http://ubuntu.local:8080.
+
+Skip below to "Use builtin uwsgi system" for an alternative to these upstart and init scripts.
 
 Creating an Upstart service for uWSGI
 ---
@@ -66,6 +61,22 @@ Next, check that uWSGI is running.
     sudo less /var/log/flask-uwsgi/flask-uwsgi.log
 
 You should see messages from uWSGI.
+
+Use builtin uwsgi system
+---
+Skip this section if you did the above.
+
+The uwsgi package installed above with apt-get already configures an /etc/init.d/uwsgi script. It reads config out of /etc/uwsgi
+
+Copy flask-uwsgi.ini to /etc/uwsgi/apps-enabled/
+
+Next, start uWSGI
+
+    sudo service uwsgi start
+    
+Next, check that uWSGI is running.
+
+    sudo less /var/log/uwsgi/flask-uwsgi.log
 
 Connecting uWSGI to Nginx
 ---
