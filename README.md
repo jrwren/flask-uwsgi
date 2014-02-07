@@ -64,7 +64,7 @@ You should see messages from uWSGI.
 
 Use builtin uwsgi system
 ---
-Skip this section if you did the above.
+Skip this section if you did the above "Creating an Upstart service for uWSGI".
 
 The uwsgi package installed above with apt-get already configures an /etc/init.d/uwsgi script. It reads config out of /etc/uwsgi
 
